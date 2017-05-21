@@ -8,22 +8,24 @@ TOOLCHAIN_PREFIX:=arm-none-eabi
 OPTLVL:=0
 DBG:=-g3
 
-FREERTOS:=$(CURDIR)/FreeRTOS
-STARTUP:=$(CURDIR)/hardware
-PROJECT:=$(CURDIR)/httpserver_netconn
-STM32EVAL:=$(CURDIR)/Utilities/STM32_EVAL
-ETHDRIVER:=$(CURDIR)/Libraries/STM32F4x7_ETH_Driver
-LWIP:=$(CURDIR)/Utilities/lwip_v1.3.2
+FREERTOS:=$(CURDIR)/../../FreeRTOS
+STARTUP:=$(CURDIR)/../../hardware
+PROJECT:=$(CURDIR)
+STM32EVAL:=$(CURDIR)/../../Utilities/STM32_EVAL
+ETHDRIVER:=$(CURDIR)/../../Libraries/STM32F4x7_ETH_Driver
+LWIP:=$(CURDIR)/../../Utilities/lwip_v1.3.2
+STM32F4_STDPERIPH_DRIVER:=$(CURDIR)/../../Libraries/STM32F4xx_StdPeriph_Driver
+CMSIS:=$(CURDIR)/../../Libraries/CMSIS
 
-LINKER_SCRIPT:=$(CURDIR)/Utilities/stm32_flash.ld
+LINKER_SCRIPT:=$(CURDIR)/../../Utilities/stm32_flash.ld
 
 #INCLUDE=-I$(CURDIR)/hardware
 INCLUDE+=-I$(FREERTOS)/include
 #INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM3
-INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Device/ST/STM32F4xx/Include
-INCLUDE+=-I$(CURDIR)/Libraries/CMSIS/Include
-INCLUDE+=-I$(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/inc
+INCLUDE+=-I$(CMSIS)/Device/ST/STM32F4xx/Include
+INCLUDE+=-I$(CMSIS)/Include
+INCLUDE+=-I$(STM32F4_STDPERIPH_DRIVER)/inc
 INCLUDE+=-I$(CURDIR)/config
 INCLUDE+=-I$(PROJECT)/inc
 INCLUDE+=-I$(STM32EVAL)/STM3240_41_G_EVAL
@@ -40,8 +42,8 @@ BIN_DIR = $(CURDIR)/binary
 
 # vpath is used so object files are written to the current directory instead
 # of the same directory as their source files
-vpath %.c $(CURDIR)/Libraries/STM32F4xx_StdPeriph_Driver/src \
-          $(CURDIR)/Libraries/syscall $(CURDIR)/hardware $(FREERTOS) \
+vpath %.c $(STM32F4_STDPERIPH_DRIVER)/src \
+          $(CURDIR)/../../Libraries/retargetStdioMessage $(STARTUP) $(FREERTOS) \
           $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM3 \
           $(PROJECT)/src $(ETHDRIVER)/src \
           $(LWIP)/port/STM32F4x7/FreeRTOS \
@@ -58,13 +60,15 @@ ASRC=startup_stm32f4xx.s
 SRC+=stm32f4xx_it.c
 SRC+=system_stm32f4xx.c
 SRC+=main.c
-SRC+=syscalls.c
 SRC+=stm32f4x7_eth_bsp.c
 SRC+=netconf.c
 SRC+=httpserver-netconn.c
 SRC+=fs.c
 SRC+=fsdata.c
 SRC+=serial_debug.c
+
+# retarget sddio printf to USART1
+SRC+=retargetio.c
 
 # STM_EVAL
 SRC+=stm324xg_eval.c
