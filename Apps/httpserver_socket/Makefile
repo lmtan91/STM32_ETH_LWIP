@@ -1,4 +1,4 @@
-TARGET:=tan
+TARGET:=httpserver_socket
 # TODO change to your ARM gcc toolchain path
 TOOLCHAIN_ROOT:=/opt/gcc-arm-none-eabi-4_7-2014q2
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
