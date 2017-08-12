@@ -34,21 +34,21 @@
 
 /*--------------- LCD Messages ---------------*/
 //#define MESSAGE1   "     STM32F4x7      "
-#define MESSAGE1   "     hello fjafajd kakak    "
+#define MESSAGE1   "     hello world    "
 #define MESSAGE2   "  STM32F-4 Series   "
 #define MESSAGE3   "Basic WebServer Demo"
-//#define MESSAGE4   "                    "
-#define MESSAGE4   " TAN LE "
 
 /*--------------- Tasks Priority -------------*/
-#define DHCP_TASK_PRIO   ( tskIDLE_PRIORITY + 2 )      
+#define DHCP_TASK_PRIO   ( tskIDLE_PRIORITY + 2 )
 #define LED_TASK_PRIO    ( tskIDLE_PRIORITY + 1 )
+#define BT_TASK_PRIO    ( tskIDLE_PRIORITY + 1 )
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 /* Private function prototypes -----------------------------------------------*/
 void LCD_LED_Init(void);
 void ToggleLed4(void * pvParameters);
+void ReadButton(void * pvParameters);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -75,6 +75,9 @@ for(i=0;i<50;i++)
   DebugComPort_Init();
 #endif
 
+  /* Initialize wakeup button */
+  STM_EVAL_PBInit( BUTTON_WAKEUP, BUTTON_MODE_GPIO );
+
   /*Initialize LCD and Leds */ 
   LCD_LED_Init();
   printf("hello world!\r\n");
@@ -94,12 +97,34 @@ for(i=0;i<50;i++)
   printf("DHCPClient\r\n");
   /* Start toogleLed4 task : Toggle LED4  every 250ms */
   xTaskCreate(ToggleLed4, "LED4", configMINIMAL_STACK_SIZE, NULL, LED_TASK_PRIO, NULL);
-  
+
+  /* Start monitor wakup button */
+  xTaskCreate(ReadButton, "UserBT", configMINIMAL_STACK_SIZE, NULL, BT_TASK_PRIO, NULL);
+
   /* Start scheduler */
   vTaskStartScheduler();
   /* We should never get here as control is now taken by the scheduler */
   for( ;; );
 
+}
+
+/**
+ *
+ */
+void ReadButton(void * pvParameters)
+{
+  for ( ;; )
+  {
+      if ( STM_EVAL_PBGetState( BUTTON_WAKEUP ) )
+      {
+          printf("pressed\r\n");
+      }
+      else
+      {
+          printf("released\r\n");
+      }
+      vTaskDelay(250);
+  }
 }
 
 /**
@@ -111,7 +136,6 @@ void ToggleLed4(void * pvParameters)
 {
   for( ;; )
   {
-    printf("heheh\r\n");
     /* Toggle LED4 each 250ms */
     STM_EVAL_LEDToggle(LED1);
     //STM_EVAL_LEDToggle(LED2);
@@ -153,7 +177,6 @@ void LCD_LED_Init(void)
   LCD_DisplayStringLine(Line0, (uint8_t*)MESSAGE1);
   LCD_DisplayStringLine(Line1, (uint8_t*)MESSAGE2);
   LCD_DisplayStringLine(Line2, (uint8_t*)MESSAGE3);
-  LCD_DisplayStringLine(Line3, (uint8_t*)MESSAGE4);  
 #endif
 }
 
