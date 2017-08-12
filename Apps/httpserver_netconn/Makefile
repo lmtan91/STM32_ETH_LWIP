@@ -1,4 +1,4 @@
-TARGET:=tan
+TARGET:=httpserver_netconn
 # TODO change to your ARM gcc toolchain path
 TOOLCHAIN_ROOT:=/opt/gcc-arm-none-eabi-4_7-2014q2
 TOOLCHAIN_PATH:=$(TOOLCHAIN_ROOT)/bin
@@ -111,8 +111,8 @@ SRC+=queue.c
 SRC+=tasks.c
 #SRC+=event_groups.c
 #SRC+=timers.c
-#SRC+=heap_4.c
-SRC+=heap_2.c
+SRC+=heap_4.c
+#SRC+=heap_2.c
 
 # Standard Peripheral Source Files
 SRC+=misc.c
