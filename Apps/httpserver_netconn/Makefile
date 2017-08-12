@@ -22,7 +22,7 @@ LINKER_SCRIPT:=$(CURDIR)/../../Utilities/stm32_flash.ld
 #INCLUDE=-I$(CURDIR)/hardware
 INCLUDE+=-I$(FREERTOS)/include
 #INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
-INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM3
+INCLUDE+=-I$(FREERTOS)/portable/GCC/ARM_CM4F
 INCLUDE+=-I$(CMSIS)/Device/ST/STM32F4xx/Include
 INCLUDE+=-I$(CMSIS)/Include
 INCLUDE+=-I$(STM32F4_STDPERIPH_DRIVER)/inc
@@ -44,7 +44,7 @@ BIN_DIR = $(CURDIR)/binary
 # of the same directory as their source files
 vpath %.c $(STM32F4_STDPERIPH_DRIVER)/src \
           $(CURDIR)/../../Libraries/retargetStdioMessage $(STARTUP) $(FREERTOS) \
-          $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM3 \
+          $(FREERTOS)/portable/MemMang $(FREERTOS)/portable/GCC/ARM_CM4F \
           $(PROJECT)/src $(ETHDRIVER)/src \
           $(LWIP)/port/STM32F4x7/FreeRTOS \
           $(STM32EVAL)/STM3240_41_G_EVAL \
