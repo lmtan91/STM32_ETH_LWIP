@@ -138,7 +138,7 @@ void ToggleLed4(void * pvParameters)
   {
     /* Toggle LED4 each 250ms */
     STM_EVAL_LEDToggle(LED1);
-    //STM_EVAL_LEDToggle(LED2);
+    STM_EVAL_LEDToggle(LED2);
     //STM_EVAL_LEDToggle(LED3);
     //STM_EVAL_LEDToggle(LED4);
     vTaskDelay(250);
@@ -159,7 +159,7 @@ void LCD_LED_Init(void)
 
   /* Initialize STM324xG-EVAL's LEDs */
   STM_EVAL_LEDInit(LED1);
-  //STM_EVAL_LEDInit(LED2);
+  STM_EVAL_LEDInit(LED2);
   //STM_EVAL_LEDInit(LED3);
   //STM_EVAL_LEDInit(LED4);
  
